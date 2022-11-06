@@ -17,6 +17,7 @@ import com.itextpdf.layout.element.IBlockElement;
 import com.itextpdf.layout.element.IElement;
 import com.itextpdf.layout.font.FontProvider;
 import com.itextpdf.layout.property.AreaBreakType;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.BaseFont;
 import freemarker.template.Configuration;
@@ -76,7 +77,7 @@ public class PdfGenerator {
         try {
             doc.setDefaultPageSize(PageSize.A4);
             FontProvider fontProvider = new FontProvider();
-            PdfFont pdfFont = PdfFontFactory.createFont("STSongStd-Light", "UniGB-UCS2-H", false);
+            PdfFont pdfFont = PdfFontFactory.createFont("/home/star/IdeaProjects/itext/demo/src/main/resources/msyh.ttc");
             fontProvider.addFont(pdfFont.getFontProgram(), "UniGB-UCS2-H");
 
             ConverterProperties properties = new ConverterProperties();

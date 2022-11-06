@@ -47,7 +47,7 @@ public class PdfHeaderMarker implements IEventHandler {
         headerTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
 
         // 设置图片
-        InputStream is = new FileInputStream("C:\\Users\\star\\Desktop\\itext\\demo\\src\\main\\resources\\logo.png");
+        InputStream is = new FileInputStream("/home/star/IdeaProjects/itext/demo/src/main/resources/logo.png");
         byte[] bytes = IoUtil.readBytes(is);
         Image img = new Image(ImageDataFactory.create(bytes));
         img.setHeight(70);
