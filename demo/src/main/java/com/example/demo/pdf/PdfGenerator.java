@@ -1,6 +1,5 @@
 package com.example.demo.pdf;
 
-
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.html2pdf.attach.impl.OutlineHandler;
@@ -18,6 +17,8 @@ import com.itextpdf.layout.element.IBlockElement;
 import com.itextpdf.layout.element.IElement;
 import com.itextpdf.layout.font.FontProvider;
 import com.itextpdf.layout.property.AreaBreakType;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.BaseFont;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -34,6 +35,39 @@ public class PdfGenerator {
         // 构造器私有化
     }
 
+    public static int getPageNumber(String htmlTmpStr,ConverterProperties properties){
+        List<IElement> iElements = HtmlConverter.convertToElements(htmlTmpStr, properties);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(outputStream, new WriterProperties().setFullCompressionMode(Boolean.TRUE));
+        PdfDocument doc = new PdfDocument(writer);
+        int pageCountNumber = 0;
+        try {
+            doc.setDefaultPageSize(PageSize.A4);
+            Document document = new Document(doc);
+            document.setBottomMargin(50f);
+            document.setTopMargin(80f);
+            document.setLeftMargin(0f);
+            document.setRightMargin(0f);
+            for (int i = 0; i < iElements.size(); i++) {
+                IElement iElement = iElements.get(i);
+                document.add((IBlockElement) iElement);
+            }
+            pageCountNumber = doc.getNumberOfPages();
+            document.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                doc.close();
+                writer.close();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return pageCountNumber;
+    }
+
     public static byte[] createPDF(String htmlTmpStr, String fontFilePath, String waterImgPath, String waterContent) {
         byte[] result = null;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -45,11 +79,6 @@ public class PdfGenerator {
             PdfFont pdfFont = PdfFontFactory.createFont("STSongStd-Light", "UniGB-UCS2-H", false);
             fontProvider.addFont(pdfFont.getFontProgram(), "UniGB-UCS2-H");
 
-            // 添加页眉
-            doc.addEventHandler(PdfDocumentEvent.START_PAGE, new PdfHeaderMarker());
-            // 添加页脚
-            doc.addEventHandler(PdfDocumentEvent.END_PAGE, new PdfPageMarker(pdfFont));
-
             ConverterProperties properties = new ConverterProperties();
             fontProvider.addStandardPdfFonts();
             fontProvider.addSystemFonts();
@@ -57,6 +86,13 @@ public class PdfGenerator {
 
             // PDF目录
             properties.setOutlineHandler(OutlineHandler.createStandardHandler());
+
+
+            int pageNumber = getPageNumber(htmlTmpStr,properties);
+            // 添加页眉
+            doc.addEventHandler(PdfDocumentEvent.START_PAGE, new PdfHeaderMarker());
+            // 添加页脚
+            doc.addEventHandler(PdfDocumentEvent.END_PAGE, new PdfPageMarker(pdfFont,pageNumber));
 
             // 将html转为pdf代码块，按div生成每天一页pdf
             Document document = new Document(doc);

@@ -29,32 +29,6 @@ import java.io.InputStream;
 
 public class PdfHeaderMarker implements IEventHandler {
 
-//    private PdfFont pdfFont;
-//    private String title;
-//
-//    public PdfHeaderMarker(PdfFont pdfFont, String title) {
-//        this.pdfFont = pdfFont;
-//        this.title = title;
-//    }
-//
-//    @Override
-//    public void handleEvent(Event event) {
-//        PdfDocumentEvent docEvent = (PdfDocumentEvent) event;
-//        PdfDocument pdf = docEvent.getDocument();
-//        PdfPage page = docEvent.getPage();
-//        Rectangle pageSize = page.getPageSize();
-//        PdfCanvas pdfCanvas = new PdfCanvas(page.getLastContentStream(), page.getResources(), pdf);
-//        Canvas canvas = new Canvas(pdfCanvas, pageSize);
-//        float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
-//        float y = pageSize.getTop() - 25;
-//        Paragraph p = new Paragraph(title)
-//                .setFontSize(12)
-//                .setFont(pdfFont);
-//        // 顶部中间位置
-//        canvas.showTextAligned(p, x, y, TextAlignment.CENTER);
-//        canvas.close();
-//
-//    }
 
     @SneakyThrows
     @Override
@@ -73,7 +47,7 @@ public class PdfHeaderMarker implements IEventHandler {
         headerTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
 
         // 设置图片
-        InputStream is = new FileInputStream("C:\\Users\\star\\IdeaProjects\\itext\\demo\\src\\main\\resources\\logo.png");
+        InputStream is = new FileInputStream("C:\\Users\\star\\Desktop\\itext\\demo\\src\\main\\resources\\logo.png");
         byte[] bytes = IoUtil.readBytes(is);
         Image img = new Image(ImageDataFactory.create(bytes));
         img.setHeight(70);

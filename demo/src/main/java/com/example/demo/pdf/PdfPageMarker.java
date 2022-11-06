@@ -30,8 +30,11 @@ public class PdfPageMarker implements IEventHandler {
 
     private PdfFont pdfFont;
 
-    public PdfPageMarker(PdfFont pdfFont) {
+    private int pageCountNumber;
+
+    public PdfPageMarker(PdfFont pdfFont, int pageCountNumber) {
         this.pdfFont = pdfFont;
+        this.pageCountNumber = pageCountNumber;
     }
 
     @Override
@@ -45,7 +48,7 @@ public class PdfPageMarker implements IEventHandler {
         Canvas canvas = new Canvas(pdfCanvas, pageSize);
         float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
         float y = pageSize.getBottom() + 15;
-        Paragraph p1 = new Paragraph("第" + pageNumber + "页")
+        Paragraph p1 = new Paragraph("第" + pageNumber + "页,共"+pageCountNumber+"页")
                 .setFontSize(12)
                 .setFont(pdfFont);
         Paragraph p2 = new Paragraph("hdfhisahfdshfisdhvijjjjjjjjjjjjjjjjjjriosdv\n"
@@ -53,7 +56,7 @@ public class PdfPageMarker implements IEventHandler {
                 .setFontSize(12)
                 .setFont(pdfFont);
         // 底部中间位置
-        canvas.showTextAligned(p1, x, y-5, TextAlignment.CENTER);
+        canvas.showTextAligned(p1, x-20, y-5, TextAlignment.CENTER);
         canvas.showTextAligned(p2, 10, y, TextAlignment.LEFT);
         canvas.close();
 
