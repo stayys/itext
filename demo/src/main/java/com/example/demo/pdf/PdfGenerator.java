@@ -3,6 +3,7 @@ package com.example.demo.pdf;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.html2pdf.attach.impl.OutlineHandler;
+import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
@@ -19,7 +20,9 @@ import com.itextpdf.layout.font.FontProvider;
 import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.BaseFont;
+import com.sun.org.apache.bcel.internal.generic.FADD;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -77,7 +80,7 @@ public class PdfGenerator {
         try {
             doc.setDefaultPageSize(PageSize.A4);
             FontProvider fontProvider = new FontProvider();
-            PdfFont pdfFont = PdfFontFactory.createFont("/home/star/IdeaProjects/itext/demo/src/main/resources/msyh.ttc");
+            PdfFont pdfFont = PdfFontFactory.createTtcFont("/home/star/IdeaProjects/itext/demo/src/main/resources/msyh.ttc",1,BaseFont.IDENTITY_H,false,true);
             fontProvider.addFont(pdfFont.getFontProgram(), "UniGB-UCS2-H");
 
             ConverterProperties properties = new ConverterProperties();
@@ -115,14 +118,6 @@ public class PdfGenerator {
             result = outputStream.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                doc.close();
-                writer.close();
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return result;
     }
